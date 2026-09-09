@@ -1,2 +1,3 @@
 _notes/
 .vscode/settings.json
+frontend/src/.env
