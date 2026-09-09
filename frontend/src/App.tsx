@@ -1,6 +1,8 @@
+import LogCard from "./components/log/LogCard"
+
 function App() {
   return (
-    <div></div>
+    <LogCard></LogCard>
   )
 }
 
