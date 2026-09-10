@@ -5,7 +5,9 @@ import Modal from "../modal/Modal";
 
 type MonthYearSelectorProps = {
     selectedMonth: number,
-    selectedYear: number
+    selectedYear: number,
+    onMonthChange: (month: number) => void,
+    onYearChange: (year: number) => void,
 }
 
 const months: string[] = [
@@ -24,33 +26,27 @@ function getYearRange(centerYear: number, span: number = 7): number[] {
     return Array.from({ length: span }, (_, i) => startYear + i);
 }
 
-export default function MonthYearSelector({selectedMonth, selectedYear}:MonthYearSelectorProps) {
-    const [currentMonth, setCurrentMonth] = useState(selectedMonth);
-    const [currentYear, setCurrentYear] = useState(selectedYear);
+export default function MonthYearSelector({selectedMonth, selectedYear, onMonthChange, onYearChange}:MonthYearSelectorProps) {
     const [showSelector, setShowSelector] = useState(false);
 
-    function recomputeMonthYear(): string {
-        return formatMonthYear(currentMonth, currentYear);
-    }
-
-    const monthYearDisplay = recomputeMonthYear();
-    const yearRange = getYearRange(currentYear);
+    const monthYearDisplay = formatMonthYear(selectedMonth, selectedYear);
+    const yearRange = getYearRange(selectedYear);
 
     function handlePrev() {
-        if(currentMonth===0) {
-            setCurrentMonth(11);
-            setCurrentYear((cur)=> cur-1)
+        if(selectedMonth===0) {
+            onMonthChange(11);
+            onYearChange(selectedYear - 1)
         } else {
-            setCurrentMonth((cur)=>cur-1);
+            onMonthChange(selectedMonth-1);
         }
     }
 
     function handleNext() {
-        if(currentMonth===11) {
-            setCurrentMonth(0);
-            setCurrentYear((cur)=> cur+1)
+        if(selectedMonth===11) {
+            onMonthChange(0);
+            onYearChange(selectedYear +1)
         } else {
-            setCurrentMonth((cur)=>cur+1);
+            onMonthChange(selectedMonth+1);
         }
     }
     
@@ -84,16 +80,16 @@ export default function MonthYearSelector({selectedMonth, selectedYear}:MonthYea
                     className="my-selector-itself"
                 >
                     <select name="selector-month" id="selector-month"
-                        value={currentMonth}
-                        onChange={(e) => setCurrentMonth(Number(e.target.value))}
+                        value={selectedMonth}
+                        onChange={(e) => onMonthChange(Number(e.target.value))}
                     >
                         {months.map((month, index) => (
                             <option key={index} value={index}>{month}</option>
                         ))}
                     </select>
                     <select name="selector-year" id="selector-year"
-                        value={currentYear}
-                        onChange={(e) => setCurrentYear(Number(e.target.value))}
+                        value={selectedYear}
+                        onChange={(e) => onYearChange(Number(e.target.value))}
                     >
                         {yearRange.map((year) => (
                             <option key={year} value={year}>{year}</option>
