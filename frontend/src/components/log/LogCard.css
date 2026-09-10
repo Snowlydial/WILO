@@ -1,11 +1,3 @@
-button {
-    appearance: none;
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-    padding: 0;
-}
-
 .custom-btn {
     cursor: pointer;
 }

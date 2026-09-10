@@ -5,6 +5,18 @@
   font-family: 'Ubuntu Mono', monospace;
 }
 
+body {
+  background-color: rgb(59, 59, 59);
+}
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 @font-face {
   font-family: 'Ubuntu Mono';
   src: url('/fonts/UbuntuMono-Regular.ttf') format('truetype');
