@@ -40,6 +40,8 @@ export default function DateSelector() {
     
     return (
         <div className="date-selector">
+            <span className='Debug'>Debug: curr date {String(selectedDate)}</span>
+
             <MonthYearSelector
                 selectedMonth={selectedMonth}
                 selectedYear={selectedYear}

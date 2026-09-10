@@ -9,6 +9,10 @@ body {
   background-color: rgb(59, 59, 59);
 }
 
+.Debug {
+  color: chartreuse;
+}
+
 button {
   appearance: none;
   -webkit-appearance: none;
