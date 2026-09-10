@@ -3,6 +3,20 @@ import DayCard from "../day-card/DayCard"
 import MonthYearSelector from "../month-year-selector/MonthYearSelector"
 import { useState } from 'react';
 
+function getWeekDates(selectedDate: Date): Date[] {
+    const dayOfWeek = selectedDate.getDay();
+    const mondayOffset = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;
+
+    const monday = new Date(selectedDate);
+    monday.setDate(selectedDate.getDate() - mondayOffset);
+
+    return Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return d;
+    });
+}
+
 export default function DateSelector() {
     const now = new Date;
     const [selectedDate, setSelectedDate] = useState(now);
@@ -22,6 +36,7 @@ export default function DateSelector() {
         setSelectedDate(updated);
     }
 
+    const weekDates = getWeekDates(selectedDate);
     
     return (
         <div className="date-selector">
@@ -32,7 +47,14 @@ export default function DateSelector() {
                 onYearChange={handleYearChange}
             />
             <div className="week-row">
-                
+                {weekDates.map((date) => (
+                    <DayCard
+                        key={date.toISOString()}
+                        date={String(date.getDate())}
+                        status="status"
+                        onDayChange={() => setSelectedDate(date)}
+                    />
+                ))}
             </div>
         </div>
     )
