@@ -55,6 +55,11 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
             });
         }
     }
+
+    async function handleConfirmDelete() {
+        setShowDeleteModal(false);
+        await onDelete(log!.id);
+    }
     
     return (
         <>
@@ -124,7 +129,7 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
                         <span>Delete this log entry ?</span>
                         <div className="action-btn">
                             <button className="cancel-btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
-                            <button className="delete-btn" onClick={() => onDelete(log.id)}>Confirm</button>
+                            <button className="delete-btn" onClick={handleConfirmDelete}>Confirm</button>
                         </div>
                     </div>
                 </Modal>
