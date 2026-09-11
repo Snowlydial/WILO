@@ -18,3 +18,8 @@ export async function createLog(logData: LogRequest): Promise<LogResponse> {
     const res = await api.post<LogResponse>('/logs', logData);
     return res.data;
 }
+
+export async function updateLog(id:number, logData: LogRequest): Promise<LogResponse> {
+    const res = await api.put<LogResponse>(`/logs/${id}`, logData);
+    return res.data;
+}

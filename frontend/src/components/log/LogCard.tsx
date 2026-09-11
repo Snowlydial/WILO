@@ -4,14 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { LogResponse } from "../../types/log/LogResponse";
+import type { LogRequest } from "../../types/log/LogRequest";
 
 interface LogCardProps {
     log: LogResponse | null;
     onCreate: () => void;
+    onUpdate: (id: number, data: LogRequest) => void;
 }
 
-export default function LogCard({ log, onCreate }: LogCardProps) {
+export default function LogCard({ log, onCreate, onUpdate }: LogCardProps) {
     const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
     const [isEditing, setIsEditing] = useState(true);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -32,6 +35,29 @@ export default function LogCard({ log, onCreate }: LogCardProps) {
                 No log at this date, add one ?
             </button>
         );
+    }
+
+    function handleContentBlur() {
+        setIsEditing(false);
+        onUpdate(log!.id, {
+            title,
+            content,
+            dateFor: log!.dateFor,
+            isDone: log!.isDone,
+            reminderFor: log!.reminderFor,
+        });
+    }
+
+    function handleTitleBlur() {
+        if (title !== log!.title) {
+            onUpdate(log!.id, {
+                title,
+                content,
+                dateFor: log!.dateFor,
+                isDone: log!.isDone,
+                reminderFor: log!.reminderFor,
+            });
+        }
     }
     
     return (
@@ -54,7 +80,13 @@ export default function LogCard({ log, onCreate }: LogCardProps) {
             </div>
             <div className="log-card-info">
                 <div className="card-info">
-                    <span className="info-title">{log.title}</span>
+                    <input
+                        className="info-title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        onBlur={handleTitleBlur}
+                        placeholder="TITLE"
+                    />
                     <div className="info-dates">
                         <span>Created: {log.createdAt}</span>
                         <span>Updated: {log.updatedAt}</span>
@@ -66,7 +98,7 @@ export default function LogCard({ log, onCreate }: LogCardProps) {
                             ref={textareaRef}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            onBlur={() => setIsEditing(false)}
+                            onBlur={handleContentBlur}
                             placeholder="Whatever content, it renders into MD file"
                         />
                     ) : (

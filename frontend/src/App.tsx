@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 
+import type { LogResponse } from './types/log/LogResponse';
+import type { LogRequest } from "./types/log/LogRequest";
+
 import LogCard from "./components/log/LogCard"
 import DateSelector from "./components/ui/date-selector/DateSelector"
 import SearchNav from "./components/ui/search-nav/SearchNav"
-import type { LogResponse } from './types/log/LogResponse';
 import { formatDateForApi } from './utils/DateUtil';
-import { getLogByDate, createLog } from './services/Logs';
+import { getLogByDate, createLog, updateLog } from './services/Logs';
 
 function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -27,6 +29,11 @@ function App() {
         setCurrentLog(newLog);
     }
 
+    async function handleUpdateLog(id: number, data: LogRequest) {
+        const updated = await updateLog(id, data);
+        setCurrentLog(updated);
+    }
+
     return (
         <>
             <SearchNav></SearchNav>
@@ -34,7 +41,11 @@ function App() {
                 selectedDate={selectedDate}
                 onDateChange={setSelectedDate}
             />
-            <LogCard log={currentLog} onCreate={handleCreateLog} />
+            <LogCard 
+                log={currentLog} 
+                onCreate={handleCreateLog}
+                onUpdate={handleUpdateLog} 
+            />
         </>
     )
 }
