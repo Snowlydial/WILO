@@ -1,6 +1,6 @@
 import "./LogCard.css";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { LogResponse } from "../../types/log/LogResponse";
@@ -19,14 +19,6 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
     const [title, setTitle] = useState('');
     const [isEditing, setIsEditing] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-    useEffect(() => {
-    if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-    }, [content, isEditing]);
 
     useEffect(() => {
         setContent(log?.content ?? '');
@@ -100,7 +92,6 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
                     <div className="card-content">
                         {isEditing ? (
                             <textarea
-                                ref={textareaRef}
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 onBlur={handleContentBlur}
