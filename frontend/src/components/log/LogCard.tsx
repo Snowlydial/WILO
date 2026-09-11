@@ -10,9 +10,10 @@ interface LogCardProps {
     log: LogResponse | null;
     onCreate: () => void;
     onUpdate: (id: number, data: LogRequest) => void;
+    onDelete: (id:number) => void;
 }
 
-export default function LogCard({ log, onCreate, onUpdate }: LogCardProps) {
+export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardProps) {
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [isEditing, setIsEditing] = useState(true);
@@ -73,7 +74,7 @@ export default function LogCard({ log, onCreate, onUpdate }: LogCardProps) {
                             <img src="/icons/check.svg" alt="check-icon" />
                         </button>
                     </div>
-                    <button className="delete-btn">
+                    <button className="delete-btn" onClick={() => onDelete(log.id)}>
                         <img src="/icons/trashcan.svg" alt="bin-icon" />
                     </button>
                 </div>

@@ -23,3 +23,8 @@ export async function updateLog(id:number, logData: LogRequest): Promise<LogResp
     const res = await api.put<LogResponse>(`/logs/${id}`, logData);
     return res.data;
 }
+
+export async function deleteLog(id:number): Promise<LogResponse> {
+    const res = await api.delete<LogResponse>(`/logs/${id}`);
+    return res.data;
+}

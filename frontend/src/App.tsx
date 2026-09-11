@@ -7,7 +7,7 @@ import LogCard from "./components/log/LogCard"
 import DateSelector from "./components/ui/date-selector/DateSelector"
 import SearchNav from "./components/ui/search-nav/SearchNav"
 import { formatDateForApi } from './utils/DateUtil';
-import { getLogByDate, createLog, updateLog } from './services/LogService';
+import { getLogByDate, createLog, updateLog, deleteLog } from './services/LogService';
 
 function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -34,6 +34,11 @@ function App() {
         setCurrentLog(updated);
     }
 
+    async function handleDeleteLog(id: number) {
+        await deleteLog(id);
+        setCurrentLog(null);
+    }
+
     return (
         <>
             <SearchNav></SearchNav>
@@ -44,7 +49,8 @@ function App() {
             <LogCard 
                 log={currentLog} 
                 onCreate={handleCreateLog}
-                onUpdate={handleUpdateLog} 
+                onUpdate={handleUpdateLog}
+                onDelete={handleDeleteLog} 
             />
         </>
     )
