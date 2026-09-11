@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { LogResponse } from "../../types/log/LogResponse";
 import type { LogRequest } from "../../types/log/LogRequest";
+import Modal from "../ui/modal/Modal";
 
 interface LogCardProps {
     log: LogResponse | null;
@@ -17,6 +18,7 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [isEditing, setIsEditing] = useState(true);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(() => {
@@ -63,62 +65,79 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
     }
     
     return (
-        <div className="log-card">
-            <div className="log-card-nav">
-                <div className="card-nav-left">
-                    <button className="reminder-btn custom-btn">Set Reminder</button>
-                </div>
-                <div className="card-nav-right">
-                    <div className="done-btn-wrapper custom-btn">
-                        <button className="done-btn">
-                            <span>Mark as done </span>
-                            <img src="/icons/check.svg" alt="check-icon" />
+        <>
+            <div className="log-card">
+                <div className="log-card-nav">
+                    <div className="card-nav-left">
+                        <button className="reminder-btn custom-btn">Set Reminder</button>
+                    </div>
+                    <div className="card-nav-right">
+                        <div className="done-btn-wrapper custom-btn">
+                            <button className="done-btn">
+                                <span>Mark as done </span>
+                                <img src="/icons/check.svg" alt="check-icon" />
+                            </button>
+                        </div>
+                        <button className="delete-btn" onClick={() => setShowDeleteModal(true)}>
+                            <img src="/icons/trashcan.svg" alt="bin-icon" />
                         </button>
                     </div>
-                    <button className="delete-btn" onClick={() => onDelete(log.id)}>
-                        <img src="/icons/trashcan.svg" alt="bin-icon" />
-                    </button>
                 </div>
-            </div>
-            <div className="log-card-info">
-                <div className="card-info">
-                    <input
-                        className="info-title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        onBlur={handleTitleBlur}
-                        placeholder="TITLE"
-                    />
-                    <div className="info-dates">
-                        <span>Created: {log.createdAt}</span>
-                        <span>Updated: {log.updatedAt}</span>
-                    </div>
-                </div>
-                <div className="card-content">
-                    {isEditing ? (
-                        <textarea
-                            ref={textareaRef}
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            onBlur={handleContentBlur}
-                            placeholder="Whatever content, it renders into MD file"
+                <div className="log-card-info">
+                    <div className="card-info">
+                        <input
+                            className="info-title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={handleTitleBlur}
+                            placeholder="TITLE"
                         />
-                    ) : (
-                        <div className="markdown-view" onClick={() => setIsEditing(true)}>
-                            {content ? (
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                    {content}
-                                </ReactMarkdown>
-                            ) : (
-                                <span className="markdown-placeholder">
-                                    Whatever content, it renders into MD file
-                                </span>
-                            )}
+                        <div className="info-dates">
+                            <span>Created: {log.createdAt}</span>
+                            <span>Updated: {log.updatedAt}</span>
                         </div>
-                    )}
+                    </div>
+                    <div className="card-content">
+                        {isEditing ? (
+                            <textarea
+                                ref={textareaRef}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                onBlur={handleContentBlur}
+                                placeholder="Whatever content, it renders into MD file"
+                            />
+                        ) : (
+                            <div className="markdown-view" onClick={() => setIsEditing(true)}>
+                                {content ? (
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {content}
+                                    </ReactMarkdown>
+                                ) : (
+                                    <span className="markdown-placeholder">
+                                        Whatever content, it renders into MD file
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
-        </div>
+            {showDeleteModal && (
+                <Modal
+                    title="Warning"
+                    onClose={() => setShowDeleteModal(false)}
+                    className="delete-modal"
+                >
+                    <div className="delete-modal-content">
+                        <span>Delete this log entry ?</span>
+                        <div className="action-btn">
+                            <button className="cancel-btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                            <button className="delete-btn" onClick={() => onDelete(log.id)}>Confirm</button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+        </>
     )
 }
