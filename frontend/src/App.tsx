@@ -7,7 +7,7 @@ import LogCard from "./components/log/LogCard"
 import DateSelector from "./components/ui/date-selector/DateSelector"
 import SearchNav from "./components/ui/search-nav/SearchNav"
 import { formatDateForApi } from './utils/DateUtil';
-import { getLogByDate, createLog, updateLog } from './services/Logs';
+import { getLogByDate, createLog, updateLog } from './services/LogService';
 
 function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
