@@ -16,14 +16,17 @@ function truncate(text: string, max: number = 100): string {
 export default function SearchPanel({ query, onSelectLog }: SearchPanelProps) {
     const [results, setResults] = useState<LogResponse[]>([]);
     const [isSearching, setIsSearching] = useState(false);
+    const [previewLog, setPreviewLog] = useState<LogResponse | null>(null);
 
     useEffect(() => {
+        setPreviewLog(null);
+
         if (query.trim().length === 0) {
             setResults([]);
             return;
         }
         setIsSearching(true);
-
+        
         const timeout = setTimeout(() => {
             searchLogs(query).then((found) => {
                 setResults(found);
@@ -33,8 +36,35 @@ export default function SearchPanel({ query, onSelectLog }: SearchPanelProps) {
         return () => clearTimeout(timeout);
     }, [query]);
 
+    function handleJumpTo() {
+        if (!previewLog) return;
+        onSelectLog(previewLog.dateFor);
+    }
+
     if (query.trim().length === 0) {
         return <div className="search-panel search-panel-idle" />;
+    }
+
+    if (previewLog) {
+        return (
+            <div className="search-panel">
+                <div className="search-preview">
+                    <button className="preview-back-btn" onClick={() => setPreviewLog(null)}>
+                        ← Back to results
+                    </button>
+                    <div className="preview-header">
+                        <span className="preview-title">{previewLog.title || 'Untitled'}</span>
+                        <span className="preview-date">{previewLog.dateFor}</span>
+                    </div>
+                    <div className="preview-content">
+                        {previewLog.content || <em>No content yet.</em>}
+                    </div>
+                    <button className="jump-to-btn" onClick={handleJumpTo}>
+                        Jump to this note
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -48,7 +78,7 @@ export default function SearchPanel({ query, onSelectLog }: SearchPanelProps) {
                     <div
                         key={log.id}
                         className="search-result-card"
-                        onClick={() => onSelectLog(log.dateFor)}
+                        onClick={() => setPreviewLog(log)}
                     >
                         <div className="result-card-header">
                             <span className="result-card-title">{log.title || 'Untitled'}</span>
