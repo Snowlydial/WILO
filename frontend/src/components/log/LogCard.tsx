@@ -28,6 +28,7 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
 
     useEffect(() => {
         setContent(log?.content ?? '');
+        setTitle(log?.title ?? '');
     }, [log]);
 
     if (!log) {
