@@ -16,7 +16,7 @@ import com.snowlydial.wilo.repo.LogRepository;
 @Service
 @RequiredArgsConstructor
 public class LogService {
-    private LogRepository logRepository;
+    private final LogRepository logRepository;
 
     // prolly never gonna use this one tho
     public List<Log> findAll() {
