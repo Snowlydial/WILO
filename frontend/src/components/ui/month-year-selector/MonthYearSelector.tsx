@@ -8,6 +8,7 @@ type MonthYearSelectorProps = {
     selectedYear: number,
     onMonthChange: (month: number) => void,
     onYearChange: (year: number) => void,
+    onDaySelect: (date: Date) => void,
 }
 
 const months: string[] = [
@@ -15,6 +16,8 @@ const months: string[] = [
     'May', 'June', 'July', 'August',
     'September', 'October', 'November', 'December'
 ];
+
+const dayHeaders = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function formatMonthYear(selectedMonth:number, selectedYear:number) {
     const monthString:string = months[selectedMonth];
@@ -26,11 +29,27 @@ function getYearRange(centerYear: number, span: number = 7): number[] {
     return Array.from({ length: span }, (_, i) => startYear + i);
 }
 
-export default function MonthYearSelector({selectedMonth, selectedYear, onMonthChange, onYearChange}:MonthYearSelectorProps) {
+function getMonthGridDates(month: number, year: number): (Date | null)[] {
+    const firstOfMonth = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfWeek = (firstOfMonth.getDay() === 0) ? 6 : firstOfMonth.getDay() - 1;
+
+    const grid: (Date | null)[] = [];
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        grid.push(null);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        grid.push(new Date(year, month, d));
+    }
+    return grid;
+}
+
+export default function MonthYearSelector({selectedMonth, selectedYear, onMonthChange, onYearChange, onDaySelect}:MonthYearSelectorProps) {
     const [showSelector, setShowSelector] = useState(false);
 
     const monthYearDisplay = formatMonthYear(selectedMonth, selectedYear);
     const yearRange = getYearRange(selectedYear);
+    const monthGrid = getMonthGridDates(selectedMonth, selectedYear);
 
     function handlePrev() {
         if(selectedMonth===0) {
@@ -48,6 +67,11 @@ export default function MonthYearSelector({selectedMonth, selectedYear, onMonthC
         } else {
             onMonthChange(selectedMonth+1);
         }
+    }
+
+    function handleDayClick(date: Date) {
+        onDaySelect(date);
+        setShowSelector(false);
     }
     
     return (
@@ -79,22 +103,44 @@ export default function MonthYearSelector({selectedMonth, selectedYear, onMonthC
                     onClose={() => setShowSelector(false)}
                     className="my-selector-itself"
                 >
-                    <select name="selector-month" id="selector-month"
-                        value={selectedMonth}
-                        onChange={(e) => onMonthChange(Number(e.target.value))}
-                    >
-                        {months.map((month, index) => (
-                            <option key={index} value={index}>{month}</option>
+                    <div className="selector-dropdowns">
+                        <select
+                            value={selectedMonth}
+                            onChange={(e) => onMonthChange(Number(e.target.value))}
+                        >
+                            {months.map((month, index) => (
+                                <option key={index} value={index}>{month}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={selectedYear}
+                            onChange={(e) => onYearChange(Number(e.target.value))}
+                        >
+                            {yearRange.map((year) => (
+                                <option key={year} value={year}>{year}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="calendar-grid">
+                        {dayHeaders.map((d) => (
+                            <span key={d} className="calendar-day-header">{d}</span>
                         ))}
-                    </select>
-                    <select name="selector-year" id="selector-year"
-                        value={selectedYear}
-                        onChange={(e) => onYearChange(Number(e.target.value))}
-                    >
-                        {yearRange.map((year) => (
-                            <option key={year} value={year}>{year}</option>
+                        {monthGrid.map((date, i) => (
+                            date ? (
+                                <button
+                                    key={i}
+                                    className="calendar-day-cell"
+                                    onClick={() => handleDayClick(date)}
+                                >
+                                    {date.getDate()}
+                                </button>
+                            ) : (
+                                <span key={i} className="calendar-day-cell-empty" />
+                            )
                         ))}
-                    </select>
+                    </div>
+
                 </Modal>
             )}
         </>

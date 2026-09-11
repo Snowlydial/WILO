@@ -24,6 +24,7 @@
     box-sizing: border-box;
 
     display: block;
+    height: 100%;
     width: 100%;
     padding: 10px 15px;
     margin-bottom: 10px;
@@ -55,4 +56,58 @@
 .my-selector-itself option {
     background: #023047;
     color: #F0F1F2;
+}
+
+.selector-dropdowns {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.selector-dropdowns select {
+    flex: 1;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    color: #F0F1F2;
+    opacity: 0.6;
+    padding-bottom: 5px;
+}
+
+.calendar-day-cell {
+    box-sizing: border-box;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #023047;
+    border: 1px solid #F0F1F2;
+    border-radius: 8px;
+
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    color: #F0F1F2;
+
+    cursor: pointer;
+}
+
+.calendar-day-cell:hover {
+    background: #219EBC;
+    color: #011627;
+}
+
+.calendar-day-cell-empty {
+    aspect-ratio: 1;
 }

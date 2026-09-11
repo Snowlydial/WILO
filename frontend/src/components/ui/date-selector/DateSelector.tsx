@@ -26,15 +26,20 @@ export default function DateSelector() {
     const selectedYear = viewDate.getFullYear();
 
     function handleMonthChange(month: number) {
-        const updated = new Date(selectedDate);
+        const updated = new Date(viewDate);
         updated.setMonth(month);
         setViewDate(updated);
     }
 
     function handleYearChange(year: number) {
-        const updated = new Date(selectedDate);
+        const updated = new Date(viewDate);
         updated.setFullYear(year);
         setViewDate(updated);
+    }
+
+    function handleDaySelect(date: Date) {
+        setSelectedDate(date);
+        setViewDate(date);
     }
 
     const weekDates = getWeekDates(viewDate);
@@ -61,6 +66,7 @@ export default function DateSelector() {
                 selectedYear={selectedYear}
                 onMonthChange={handleMonthChange}
                 onYearChange={handleYearChange}
+                onDaySelect={handleDaySelect}
             />
             <div className="week-row">
                 <button
