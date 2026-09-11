@@ -86,3 +86,18 @@
 
     color: #011627;
 }
+
+.day-card-selected {
+    background: #219EBC;
+    border: 1px solid #F0F1F2;
+}
+
+.day-card-selected > .day-card-day,
+.day-card-selected > .day-card-tag {
+    color: #011627;
+}
+
+.day-card-selected > .day-card-status {
+    background: #011627;
+    color: #F0F1F2;
+}

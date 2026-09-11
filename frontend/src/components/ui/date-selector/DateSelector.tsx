@@ -54,7 +54,7 @@ export default function DateSelector() {
     
     return (
         <div className="date-selector">
-            <span className='Debug'>Debug: curr date {String(selectedDate)}</span>
+            {/* <span className='Debug'>Debug: curr date {String(selectedDate)}</span> */}
 
             <MonthYearSelector
                 selectedMonth={selectedMonth}
@@ -75,6 +75,7 @@ export default function DateSelector() {
                         day={String(date.getDate())}
                         dayTag={dayTag[index]}
                         status="status"
+                        isSelected={date.toDateString() === selectedDate.toDateString()}
                         onDayChange={() => setSelectedDate(date)}
                     />
                 ))}
