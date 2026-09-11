@@ -1,0 +1,19 @@
+.app-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.app-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 660px;
+    flex-shrink: 0;
+}
+
+.app-right {
+    flex: 1;
+    min-width: 0;
+}

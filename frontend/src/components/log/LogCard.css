@@ -10,9 +10,8 @@
     gap: 7px;
 
     width: 660px;
-    height: auto;
-    left: 20px;
-    top: 293px;
+    height: 674px;
+    min-height: 0;
 
     background: #011627;
     border: 1px solid #F0F1F2;
@@ -22,30 +21,27 @@
 }
 
 .add-log-btn {
-    margin: 20px;
+    box-sizing: border-box;
+    width: 660px;
+    height: 674px;
+    margin: 0;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
-    width: fit-content;
-    padding: 20px;
-    height: 29px;
-
-    background: #219EBC;
+    background: #011627;
     border: 1px solid #F0F1F2;
-    border-radius: 50px;
+    box-shadow: 4px 4px 0px #219EBC;
+    border-radius: 10px;
 
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    
-    font-style: normal;
-    font-weight: 400;
     font-size: 16px;
-    line-height: 16px;
     color: #F0F1F2;
+    cursor: pointer;
+}
 
-    cursor:pointer;
+.add-log-btn:hover {
+    border-color: #219EBC;
 }
 
 .log-card-nav {
@@ -160,12 +156,12 @@
     gap: 13px;
 
     width: 618px;
-    height: fit-content;
+    height: 0;
+    min-height: 0;
 
-    flex: none;
+    flex: 1;
     order: 1;
     align-self: stretch;
-    flex-grow: 1;
 }
 
 .card-info {
@@ -232,30 +228,27 @@
     padding: 10px;
     gap: 10px;
 
-    width: 618px;
-    min-height: 400px;
-    height: fit-content;
+    width: 100%;
+    height: 0;
+    min-height: 0;
+    overflow-y: auto;
 
     background: #1E1E1E;
     border-radius: 10px;
 
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 1;
+    flex: 1;
     color: #F0F1F2;
 }
 
 .card-content textarea {
     width: 100%;
-    max-width: 100%;
+    height: 100%;
     box-sizing: border-box;
     background: transparent;
     border: none;
     outline: none;
     resize: none;
-    overflow: hidden;
-    overflow-x: hidden;
+    overflow-y: auto;
     word-wrap: break-word;
     white-space: pre-wrap;
     font-size: 14px;
@@ -263,8 +256,10 @@
 }
 
 .markdown-view {
-    width: 100%;
-    min-height: 300px;
+        width: 100%;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     cursor: text;
 }
 

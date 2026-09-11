@@ -1,20 +1,26 @@
 import './SearchNav.css'
-import SearchBar from "../search-bar/SearchBar"
 
 interface SearchNavProps {
-    onSearchClick: () => void;
+    query: string;
+    onQueryChange: (value: string) => void;
 }
 
-export default function SearchNav({ onSearchClick }: SearchNavProps) {
+export default function SearchNav({ query, onQueryChange }: SearchNavProps) {
     return (
         <nav>
             <span className="logo">Logo</span>
             <div className="nav-right">
-                <SearchBar onClick={onSearchClick} />
+                <input
+                    className="search-input"
+                    type="text"
+                    value={query}
+                    onChange={(e) => onQueryChange(e.target.value)}
+                    placeholder="Rechercher une note"
+                />
                 <button>
                     <img src="/icons/bell.svg" alt="notification" />
                 </button>
             </div>
         </nav>
     )
-} 
+}
