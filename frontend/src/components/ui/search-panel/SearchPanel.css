@@ -16,7 +16,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+
+    background-image: url('/images/motivation.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .search-panel-idle-label {

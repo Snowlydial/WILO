@@ -61,6 +61,7 @@ nav {
     font-size: 16px;
     color: #F0F1F2;
     outline: none;
+    text-align: center;
 }
 
 .search-input::placeholder {

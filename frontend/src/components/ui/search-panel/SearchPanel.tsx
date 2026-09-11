@@ -34,11 +34,7 @@ export default function SearchPanel({ query, onSelectLog }: SearchPanelProps) {
     }, [query]);
 
     if (query.trim().length === 0) {
-        return (
-            <div className="search-panel search-panel-idle">
-                <span className="search-panel-idle-label">Search results will appear here</span>
-            </div>
-        );
+        return <div className="search-panel search-panel-idle" />;
     }
 
     return (
