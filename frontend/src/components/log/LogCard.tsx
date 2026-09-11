@@ -3,8 +3,14 @@ import "./LogCard.css";
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import type { LogResponse } from "../../types/log/LogResponse";
 
-export default function LogCard() {
+interface LogCardProps {
+    log: LogResponse | null;
+    onCreate: () => void;
+}
+
+export default function LogCard({ log, onCreate }: LogCardProps) {
     const [content, setContent] = useState('');
     const [isEditing, setIsEditing] = useState(true);
 
@@ -16,6 +22,18 @@ export default function LogCard() {
     }
     }, [content, isEditing]);
 
+    // if (!log) {
+    //     return (
+    //         <button className="add-log-btn" onClick={onCreate}>
+    //             No log at this date, add one ?
+    //         </button>
+    //     );
+    // }
+
+    // useEffect(() => {
+    //     setContent(log?.content ?? '');
+    // }, [log]);
+    
     return (
         <div className="log-card">
             <div className="log-card-nav">
@@ -49,13 +67,19 @@ export default function LogCard() {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             onBlur={() => setIsEditing(false)}
-                            placeholder="Whatever content, text field, insert list in there..."
+                            placeholder="Whatever content, it renders into MD file"
                         />
                     ) : (
-                        <div onClick={() => setIsEditing(true)}>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {content}
-                        </ReactMarkdown>
+                        <div className="markdown-view" onClick={() => setIsEditing(true)}>
+                            {content ? (
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                    {content}
+                                </ReactMarkdown>
+                            ) : (
+                                <span className="markdown-placeholder">
+                                    Whatever content, it renders into MD file
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>

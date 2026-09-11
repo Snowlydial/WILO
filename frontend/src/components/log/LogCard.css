@@ -21,6 +21,31 @@
 
 }
 
+.add-log-btn {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: fit-content;
+    padding: 20px;
+    height: 29px;
+
+    background: #219EBC;
+    border: 1px solid #F0F1F2;
+    border-radius: 50px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    color: #F0F1F2;
+}
+
 .log-card-nav {
     display: flex;
     flex-direction: row;
@@ -230,4 +255,16 @@
     white-space: pre-wrap;
     font-size: 14px;
     color: #F0F1F2;
+}
+
+.markdown-view {
+    width: 100%;
+    min-height: 300px;
+    cursor: text;
+}
+
+.markdown-placeholder {
+    color: #F0F1F2;
+    opacity: 0.5;
+    font-size: 14px;
 }
