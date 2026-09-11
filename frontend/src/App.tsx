@@ -1,11 +1,11 @@
 import LogCard from "./components/log/LogCard"
 import DateSelector from "./components/ui/date-selector/DateSelector"
-import SearchBar from "./components/ui/search-bar/SearchBar"
+import SearchNav from "./components/ui/search-nav/SearchNav"
 
 function App() {
   return (
     <>
-      <SearchBar></SearchBar>
+      <SearchNav></SearchNav>
       <DateSelector></DateSelector>
       <LogCard></LogCard>
     </>
