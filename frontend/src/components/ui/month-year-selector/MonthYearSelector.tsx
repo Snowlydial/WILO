@@ -3,25 +3,14 @@ import './MonthYearSelector.css'
 import { useState } from "react";
 import Modal from "../modal/Modal";
 
+import { months, dayHeaders, formatMonthYear } from '../../../utils/DateUtil';
+
 type MonthYearSelectorProps = {
     selectedMonth: number,
     selectedYear: number,
     onMonthChange: (month: number) => void,
     onYearChange: (year: number) => void,
     onDaySelect: (date: Date) => void,
-}
-
-const months: string[] = [
-    'January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August',
-    'September', 'October', 'November', 'December'
-];
-
-const dayHeaders = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-function formatMonthYear(selectedMonth:number, selectedYear:number) {
-    const monthString:string = months[selectedMonth];
-    return monthString + " " + String(selectedYear);
 }
 
 function getYearRange(centerYear: number, span: number = 7): number[] {
