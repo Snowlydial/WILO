@@ -37,6 +37,7 @@ export default function DateSelector() {
     }
 
     const weekDates = getWeekDates(selectedDate);
+    const dayTag: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     
     return (
         <div className="date-selector">
@@ -52,7 +53,8 @@ export default function DateSelector() {
                 {weekDates.map((date) => (
                     <DayCard
                         key={date.toISOString()}
-                        date={String(date.getDate())}
+                        day={String(date.getDate())}
+                        dayTag={dayTag[index]}
                         status="status"
                         onDayChange={() => setSelectedDate(date)}
                     />
