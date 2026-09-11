@@ -14,6 +14,11 @@ export async function getLogByDate(date: string): Promise<LogResponse | null> {
     }
 }
 
+export async function searchLogs(query: string): Promise<LogResponse[]> {
+    const res = await api.get<LogResponse[]>('/logs/search', { params: { q: query } });
+    return res.data;
+}
+
 export async function createLog(logData: LogRequest): Promise<LogResponse> {
     const res = await api.post<LogResponse>('/logs', logData);
     return res.data;

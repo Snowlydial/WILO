@@ -1,12 +1,16 @@
 import './SearchNav.css'
 import SearchBar from "../search-bar/SearchBar"
 
-export default function SearchNav() {
+interface SearchNavProps {
+    onSearchClick: () => void;
+}
+
+export default function SearchNav({ onSearchClick }: SearchNavProps) {
     return (
         <nav>
             <span className="logo">Logo</span>
             <div className="nav-right">
-                <SearchBar></SearchBar>
+                <SearchBar onClick={onSearchClick} />
                 <button>
                     <img src="/icons/bell.svg" alt="notification" />
                 </button>
