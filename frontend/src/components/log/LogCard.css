@@ -44,6 +44,8 @@
     font-size: 16px;
     line-height: 16px;
     color: #F0F1F2;
+
+    cursor:pointer;
 }
 
 .log-card-nav {
@@ -190,6 +192,9 @@
 }
 
 .info-title {
+    background: transparent;
+    border: none;
+    outline: none;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;

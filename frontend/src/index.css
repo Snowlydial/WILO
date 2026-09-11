@@ -32,6 +32,10 @@ button {
   padding: 0;
 }
 
+.selector-arrow {
+  cursor: pointer;
+}
+
 @font-face {
   font-family: 'Ubuntu Mono';
   src: url('/fonts/UbuntuMono-Regular.ttf') format('truetype');
