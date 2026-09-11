@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.snowlydial.wilo.model.Log;
 import com.snowlydial.wilo.dto.LogRequest;
+import com.snowlydial.wilo.dto.LogResponse;
 import com.snowlydial.wilo.repo.LogRepository;
 
 @Service
@@ -31,6 +32,12 @@ public class LogService {
     public Log findByDateFor(LocalDate date) {
         return logRepository.findByDateFor(date)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No log found for date: " + date));
+    }
+
+    public List<LogResponse> search(String query) {
+        return logRepository.searchByTitleOrContent(query).stream()
+            .map(LogResponse::from)
+            .toList();
     }
 
     public Log create(LogRequest request) {

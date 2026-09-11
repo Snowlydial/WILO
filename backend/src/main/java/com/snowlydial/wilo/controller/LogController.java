@@ -1,6 +1,7 @@
 package com.snowlydial.wilo.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +36,11 @@ public class LogController {
     @GetMapping("/date/{date}")
     public LogResponse showForDate(@PathVariable LocalDate date) {
         return LogResponse.from(logService.findByDateFor(date));
+    }
+
+    @GetMapping("/search")
+    public List<LogResponse> search(@RequestParam String q) {
+        return logService.search(q);
     }
 
     @PostMapping
