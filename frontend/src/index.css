@@ -6,11 +6,22 @@
 }
 
 body {
-  background-color: rgb(59, 59, 59);
+  background: #011627;
 }
 
 .Debug {
   color: chartreuse;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
 }
 
 button {
