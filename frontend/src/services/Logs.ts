@@ -1,0 +1,20 @@
+import api from './Api';
+import type { LogResponse } from '../types/log/LogResponse';
+import type { LogRequest } from '../types/log/LogRequest';
+
+export async function getLogByDate(date: string): Promise<LogResponse | null> {
+    try {
+        const res = await api.get<LogResponse>(`/logs/date/${date}`);
+        return res.data;
+    } catch (err: any) {
+        if (err.response?.status === 404) {
+            return null;
+        }
+        throw err;
+    }
+}
+
+export async function createLog(logData: LogRequest): Promise<LogResponse> {
+    const res = await api.post<LogResponse>('/logs', logData);
+    return res.data;
+}

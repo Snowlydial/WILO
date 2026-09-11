@@ -1,15 +1,17 @@
 import './DateSelector.css'
 import DayCard from "../day-card/DayCard"
 import MonthYearSelector from "../month-year-selector/MonthYearSelector"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import type { LogResponse } from '../../../types/log/LogResponse';
-import { dayHeaders, formatDateForApi, getWeekDates } from '../../../utils/DateUtil';
+import { dayHeaders, getWeekDates } from '../../../utils/DateUtil';
 
-export default function DateSelector() {
-    const now = new Date;
-    const [selectedDate, setSelectedDate] = useState(now);
-    const [viewDate, setViewDate] = useState(now);
+type DateSelectorProps = {
+    selectedDate: Date;
+    onDateChange: (date: Date) => void;
+}
+
+export default function DateSelector({ selectedDate, onDateChange }: DateSelectorProps) {
+    const [viewDate, setViewDate] = useState(selectedDate);
 
     const selectedMonth = viewDate.getMonth();
     const selectedYear = viewDate.getFullYear();
@@ -27,7 +29,7 @@ export default function DateSelector() {
     }
 
     function handleDaySelect(date: Date) {
-        setSelectedDate(date);
+        onDateChange(date);
         setViewDate(date);
     }
 
@@ -70,7 +72,7 @@ export default function DateSelector() {
                         dayTag={dayHeaders[index]}
                         status="status"
                         isSelected={date.toDateString() === selectedDate.toDateString()}
-                        onDayChange={() => setSelectedDate(date)}
+                        onDayChange={() => onDateChange(date)}
                     />
                 ))}
                 <button

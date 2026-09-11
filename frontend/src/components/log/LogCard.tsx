@@ -22,17 +22,17 @@ export default function LogCard({ log, onCreate }: LogCardProps) {
     }
     }, [content, isEditing]);
 
-    // if (!log) {
-    //     return (
-    //         <button className="add-log-btn" onClick={onCreate}>
-    //             No log at this date, add one ?
-    //         </button>
-    //     );
-    // }
+    useEffect(() => {
+        setContent(log?.content ?? '');
+    }, [log]);
 
-    // useEffect(() => {
-    //     setContent(log?.content ?? '');
-    // }, [log]);
+    if (!log) {
+        return (
+            <button className="add-log-btn" onClick={onCreate}>
+                No log at this date, add one ?
+            </button>
+        );
+    }
     
     return (
         <div className="log-card">
@@ -54,10 +54,10 @@ export default function LogCard({ log, onCreate }: LogCardProps) {
             </div>
             <div className="log-card-info">
                 <div className="card-info">
-                    <span className="info-title">TITLE</span>
+                    <span className="info-title">{log.title}</span>
                     <div className="info-dates">
-                        <span>Created: dd/mm/yyyy at hh:mm</span>
-                        <span>Updated: dd/mm/yyyy at hh:mm</span>
+                        <span>Created: {log.createdAt}</span>
+                        <span>Updated: {log.updatedAt}</span>
                     </div>
                 </div>
                 <div className="card-content">
