@@ -114,6 +114,12 @@
     background: #FFB703;
     border-radius: 50px;
 
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    color: #011627;
+
     flex: none;
     order: 0;
     flex-grow: 0;
