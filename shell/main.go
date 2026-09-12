@@ -2,32 +2,57 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"syscall"
 	"time"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
+
+type Settings struct {
+	ReminderState   bool   `json:"reminderState"`
+	DisplayOver     bool   `json:"displayOver"`
+	Autostart       bool   `json:"autostart"`
+	NotifyTimeOfDay string `json:"notifyTimeOfDay"`
+}
+
+func loadSettings() (*Settings, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return nil, err
+	}
+	path := filepath.Join(home, ".wilo", "settings.json")
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var settings Settings
+	if err := json.Unmarshal(data, &settings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
 
 var backendCmd *exec.Cmd
 
 func resolveJarPath() string {
 	exePath, err := os.Executable()
 	if err != nil {
-		println("Failed to resolve executable path:", err.Error())
 		return ""
 	}
 	exeDir := filepath.Dir(exePath)
-
-	// shell/build/bin/wilo.exe -> ../../../backend/target/wilo-0.0.1.jar
 	return filepath.Join(exeDir, "..", "..", "..", "backend", "target", "wilo-0.0.1.jar")
 }
 
@@ -36,10 +61,9 @@ func startBackend() {
 	if jarPath == "" {
 		return
 	}
-
 	backendCmd = exec.Command("java", "-jar", jarPath)
-	backendCmd.SysProcAttr = &syscall.SysProcAttr{
-		HideWindow: true,
+	if runtime.GOOS == "windows" {
+		backendCmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	}
 	backendCmd.Start()
 
@@ -65,11 +89,21 @@ type App struct {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	runtime.WindowExecJS(ctx, `
+
+	wailsruntime.WindowExecJS(ctx, `
 		window.addEventListener('load', function() {
 			document.body.style.zoom = '90%';
 		});
 	`)
+
+	if settings, err := loadSettings(); err == nil {
+		wailsruntime.WindowSetAlwaysOnTop(ctx, settings.DisplayOver)
+	}
+}
+
+//?=== SetAlwaysOnTop is bound and callable from the frontend
+func (a *App) SetAlwaysOnTop(enabled bool) {
+	wailsruntime.WindowSetAlwaysOnTop(a.ctx, enabled)
 }
 
 func main() {
@@ -93,6 +127,9 @@ func main() {
 		},
 		AssetServer: &assetserver.Options{
 			Handler: proxy,
+		},
+		Bind: []interface{}{
+			app,
 		},
 	})
 

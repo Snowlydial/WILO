@@ -3,6 +3,7 @@ import Modal from '../../ui/modal/Modal';
 import MonthlyRecap from '../monthly-recap/MonthlyRecap';
 import { getSettings, updateSettings } from '../../../services/SettingsService';
 import type { Settings } from '../../../types/Settings';
+import { setAlwaysOnTop } from '../../../services/WailsBridge';
 import './SettingsModal.css';
 
 interface SettingsModalProps {
@@ -25,6 +26,10 @@ export default function SettingsModal({ onClose, onSelectDay }: SettingsModalPro
         const updated = { ...settings, [field]: value };
         setSettings(updated);
         updateSettings(updated);
+
+        if (field === 'displayOver') {
+            setAlwaysOnTop(value as boolean);
+        }
     }
 
     function handleSelectDay(dateStr: string) {
