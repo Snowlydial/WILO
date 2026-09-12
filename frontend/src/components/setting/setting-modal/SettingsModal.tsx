@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import Modal from '../ui/modal/Modal';
-import { getSettings, updateSettings } from '../../services/SettingsService';
-import type { Settings } from '../../types/Settings';
+import Modal from '../../ui/modal/Modal';
+import { getSettings, updateSettings } from '../../../services/SettingsService';
+import type { Settings } from '../../../types/Settings';
 import './SettingsModal.css';
 
 interface SettingsModalProps {

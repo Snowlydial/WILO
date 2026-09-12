@@ -8,7 +8,7 @@ import LogCard from "./components/log/LogCard";
 import DateSelector from "./components/ui/date-selector/DateSelector";
 import SearchNav from "./components/ui/search-nav/SearchNav";
 import SearchPanel from "./components/ui/search-panel/SearchPanel";
-import SettingsModal from "./components/setting/SettingsModal";
+import SettingsModal from "./components/setting/setting-modal/SettingsModal";
 
 import { formatDateForApi, getWeekDates } from './utils/DateUtil';
 import { getLogByDate, createLog, updateLog, deleteLog, getStatusRange, getDueReminders } from './services/LogService';
