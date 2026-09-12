@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 
 import type { LogResponse } from './types/log/LogResponse';
 import type { LogRequest } from "./types/log/LogRequest";
+import type { LogStatus } from "./types/log/LogStatus";
 
 import LogCard from "./components/log/LogCard";
 import DateSelector from "./components/ui/date-selector/DateSelector";
 import SearchNav from "./components/ui/search-nav/SearchNav";
 import SearchPanel from "./components/ui/search-panel/SearchPanel";
-import { formatDateForApi } from './utils/DateUtil';
-import { getLogByDate, createLog, updateLog, deleteLog, getDueReminders } from './services/LogService';
+import { formatDateForApi, getWeekDates } from './utils/DateUtil';
+import { getLogByDate, createLog, updateLog, deleteLog, getStatusRange, getDueReminders } from './services/LogService';
 import { getSettings } from './services/SettingsService';
 
 import './App.css';
@@ -19,11 +20,24 @@ function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentLog, setCurrentLog] = useState<LogResponse | null>(null);
     const [query, setQuery] = useState('');
+    const [statuses, setStatuses] = useState<Map<string, LogStatus>>(new Map());
     const [dueReminders, setDueReminders] = useState<LogResponse[]>([]);
 
     useEffect(() => {
         const dateStr = formatDateForApi(selectedDate);
         getLogByDate(dateStr).then(setCurrentLog);
+    }, [selectedDate]);
+
+    async function refreshStatuses(forDate: Date) {
+        const weekDates = getWeekDates(forDate);
+        const start = formatDateForApi(weekDates[0]);
+        const end = formatDateForApi(weekDates[6]);
+        const results = await getStatusRange(start, end);
+        setStatuses(new Map(results.map((s) => [s.dateFor, s])));
+    }
+
+    useEffect(() => {
+        refreshStatuses(selectedDate);
     }, [selectedDate]);
 
     async function handleCreateLog() {
@@ -48,13 +62,14 @@ function App() {
         setQuery('');
     }
 
-    function fireReminderNotification(log: LogResponse) {
-        const notification = new Notification('WILO Reminder', {
-            body: log.title || 'You have a log to revisit today',
+    function fireGroupedReminderNotification(logs: LogResponse[]) {
+        const titles = logs.map((log) => log.title || 'Untitled').join(', ');
+        const notification = new Notification('WILO Reminders', {
+            body: logs.length === 1
+                ? (logs[0].title || 'You have a log to revisit')
+                : `${logs.length} logs need attention: ${titles}`,
         });
         notification.onclick = () => {
-            const [year, month, day] = log.dateFor.split('-').map(Number);
-            setSelectedDate(new Date(year, month - 1, day));
             window.focus();
         };
     }
@@ -71,12 +86,11 @@ function App() {
 
             if (!settings.reminderState) return;
 
-            due.forEach((log) => {
-                if (!notifiedReminderIds.has(log.id) && Notification.permission === 'granted') {
-                    fireReminderNotification(log);
-                    notifiedReminderIds.add(log.id);
-                }
-            });
+            const newlyDue = due.filter((log) => !notifiedReminderIds.has(log.id));
+            if (newlyDue.length > 0 && Notification.permission === 'granted') {
+                fireGroupedReminderNotification(newlyDue);
+                newlyDue.forEach((log) => notifiedReminderIds.add(log.id));
+            }
         }
 
         checkReminders();
@@ -93,7 +107,12 @@ function App() {
                     dueReminders={dueReminders}
                     onSelectReminder={handleSelectSearchResult}
                 />
-                <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
+                <DateSelector
+                    selectedDate={selectedDate}
+                    onDateChange={setSelectedDate}
+                    statuses={statuses}
+                    onWeekChange={refreshStatuses}
+                />
                 <SearchPanel query={query} onSelectLog={handleSelectSearchResult} />
             </div>
             <div className="app-right">

@@ -9,19 +9,23 @@ import { useState } from 'react';
 import { dayHeaders, getWeekDates } from '../../../utils/DateUtil';
 import type { LogStatus } from '../../../types/log/LogStatus';
 import { formatDateForApi } from '../../../utils/DateUtil';
-import { getStatusRange } from '../../../services/LogService';
 
 type DateSelectorProps = {
     selectedDate: Date;
     onDateChange: (date: Date) => void;
+    statuses: Map<string, LogStatus>;
+    onWeekChange: (date: Date) => void;
 }
 
-export default function DateSelector({ selectedDate, onDateChange }: DateSelectorProps) {
+export default function DateSelector({ selectedDate, onDateChange, statuses, onWeekChange }: DateSelectorProps) {
     const [viewDate, setViewDate] = useState(selectedDate);
-    const [statuses, setStatuses] = useState<Map<string, LogStatus>>(new Map());
 
     const selectedMonth = viewDate.getMonth();
     const selectedYear = viewDate.getFullYear();
+
+    useEffect(() => {
+        onWeekChange(viewDate);
+    }, [viewDate]);
 
     function handleMonthChange(month: number) {
         const updated = new Date(viewDate);
@@ -53,15 +57,6 @@ export default function DateSelector({ selectedDate, onDateChange }: DateSelecto
         updated.setDate(viewDate.getDate() + 7);
         setViewDate(updated);
     }
-
-    useEffect(() => {
-        const start = formatDateForApi(weekDates[0]);
-        const end = formatDateForApi(weekDates[6]);
-        getStatusRange(start, end).then((results) => {
-            const map = new Map(results.map((s) => [s.dateFor, s]));
-            setStatuses(map);
-        });
-    }, [viewDate]);
     
     return (
         <div className="date-selector">
