@@ -13,10 +13,13 @@ import { getSettings } from './services/SettingsService';
 
 import './App.css';
 
+const notifiedReminderIds = new Set<number>();
+
 function App() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentLog, setCurrentLog] = useState<LogResponse | null>(null);
     const [query, setQuery] = useState('');
+    const [dueReminders, setDueReminders] = useState<LogResponse[]>([]);
 
     useEffect(() => {
         const dateStr = formatDateForApi(selectedDate);
@@ -61,17 +64,17 @@ function App() {
             Notification.requestPermission();
         }
 
-        const notifiedIds = new Set<number>();
-
         async function checkReminders() {
             const settings = await getSettings();
+            const due = await getDueReminders();
+            setDueReminders(due);
+
             if (!settings.reminderState) return;
 
-            const due = await getDueReminders();
             due.forEach((log) => {
-                if (!notifiedIds.has(log.id) && Notification.permission === 'granted') {
+                if (!notifiedReminderIds.has(log.id) && Notification.permission === 'granted') {
                     fireReminderNotification(log);
-                    notifiedIds.add(log.id);
+                    notifiedReminderIds.add(log.id);
                 }
             });
         }
@@ -84,7 +87,12 @@ function App() {
     return (
         <div className="app-layout">
             <div className="app-left">
-                <SearchNav query={query} onQueryChange={setQuery} />
+                <SearchNav
+                    query={query}
+                    onQueryChange={setQuery}
+                    dueReminders={dueReminders}
+                    onSelectReminder={handleSelectSearchResult}
+                />
                 <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
                 <SearchPanel query={query} onSelectLog={handleSelectSearchResult} />
             </div>

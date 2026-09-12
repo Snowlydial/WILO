@@ -72,3 +72,89 @@ nav {
 .search-input:focus {
     border-color: #219EBC;
 }
+
+.bell-wrapper {
+    position: relative;
+}
+
+.bell-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+
+    background: #E63946;
+    border-radius: 50px;
+
+    font-size: 10px;
+    color: #F0F1F2;
+}
+
+.bell-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+
+    width: 280px;
+    max-height: 300px;
+    overflow-y: auto;
+
+    background: #011627;
+    border: 1px solid #F0F1F2;
+    box-shadow: 4px 4px 0px #219EBC;
+    border-radius: 10px;
+
+    padding: 10px;
+    z-index: 50;
+}
+
+.bell-empty {
+    display: block;
+    color: #F0F1F2;
+    opacity: 0.6;
+    font-size: 13px;
+    padding: 10px;
+    text-align: center;
+}
+
+.bell-item {
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 8px;
+
+    background: #023047;
+    border: 1px solid #F0F1F2;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.bell-item:last-child {
+    margin-bottom: 0;
+}
+
+.bell-item:hover {
+    border-color: #219EBC;
+}
+
+.bell-item-title {
+    display: block;
+    font-size: 14px;
+    color: #F0F1F2;
+}
+
+.bell-item-date {
+    display: block;
+    font-size: 11px;
+    color: #F0F1F2;
+    opacity: 0.6;
+    margin-top: 3px;
+}
