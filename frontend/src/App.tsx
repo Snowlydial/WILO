@@ -35,9 +35,7 @@ function App() {
         const weekDates = getWeekDates(forDate);
         const start = formatDateForApi(weekDates[0]);
         const end = formatDateForApi(weekDates[6]);
-        console.log('Refreshing statuses for range:', start, 'to', end);
         const results = await getStatusRange(start, end);
-        console.log('Got statuses:', results);
         setStatuses(new Map(results.map((s) => [s.dateFor, s])));
     }
 
@@ -45,21 +43,31 @@ function App() {
         refreshStatuses(selectedDate);
     }, [selectedDate]);
 
+    async function refreshDueReminders() {
+        const due = await getDueReminders();
+        setDueReminders(due);
+    }
+
     async function handleCreateLog() {
         const dateStr = formatDateForApi(selectedDate);
         const newLog = await createLog({ title: '', content: '', dateFor: dateStr, isDone: false, reminderFor: null });
         setCurrentLog(newLog);
+        await refreshStatuses(selectedDate);
+        await refreshDueReminders();
     }
 
     async function handleUpdateLog(id: number, data: LogRequest) {
         const updated = await updateLog(id, data);
         setCurrentLog(updated);
         await refreshStatuses(selectedDate);
+        await refreshDueReminders();
     }
 
     async function handleDeleteLog(id: number) {
         await deleteLog(id);
         setCurrentLog(null);
+        await refreshStatuses(selectedDate);
+        await refreshDueReminders();
     }
 
     function handleSelectSearchResult(dateStr: string) {
@@ -87,6 +95,9 @@ function App() {
 
         async function checkReminders() {
             const settings = await getSettings();
+            const due = await getDueReminders();
+            setDueReminders(due);
+
             if (!settings.reminderState) return;
 
             const now = new Date();
@@ -94,9 +105,6 @@ function App() {
             const isPastNotifyTime =
                 now.getHours() > notifyHour ||
                 (now.getHours() === notifyHour && now.getMinutes() >= notifyMinute);
-
-            const due = await getDueReminders();
-            setDueReminders(due);
 
             if (!isPastNotifyTime) return;
 
@@ -108,7 +116,7 @@ function App() {
         }
 
         checkReminders();
-        const interval = setInterval(checkReminders, 10000);
+        const interval = setInterval(checkReminders, 60000);
         return () => clearInterval(interval);
     }, []);
 

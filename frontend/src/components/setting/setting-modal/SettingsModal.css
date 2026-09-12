@@ -98,3 +98,8 @@
     text-align: center;
     padding-top: 40px;
 }
+
+.settings-row input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
