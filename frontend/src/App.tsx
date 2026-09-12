@@ -8,7 +8,9 @@ import DateSelector from "./components/ui/date-selector/DateSelector";
 import SearchNav from "./components/ui/search-nav/SearchNav";
 import SearchPanel from "./components/ui/search-panel/SearchPanel";
 import { formatDateForApi } from './utils/DateUtil';
-import { getLogByDate, createLog, updateLog, deleteLog } from './services/LogService';
+import { getLogByDate, createLog, updateLog, deleteLog, getDueReminders } from './services/LogService';
+import { getSettings } from './services/SettingsService';
+
 import './App.css';
 
 function App() {
@@ -43,12 +45,45 @@ function App() {
         setQuery('');
     }
 
+    function fireReminderNotification(log: LogResponse) {
+        const notification = new Notification('WILO Reminder', {
+            body: log.title || 'You have a log to revisit today',
+        });
+        notification.onclick = () => {
+            const [year, month, day] = log.dateFor.split('-').map(Number);
+            setSelectedDate(new Date(year, month - 1, day));
+            window.focus();
+        };
+    }
+
+    async function checkReminders() {
+        const settings = await getSettings();
+        if (!settings.reminderState) return;
+
+        const due = await getDueReminders();
+        due.forEach((log) => {
+            if (Notification.permission === 'granted') {
+                fireReminderNotification(log);
+            }
+        });
+    }
+
+    useEffect(() => {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        checkReminders();
+        const interval = setInterval(checkReminders, 60000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="app-layout">
             <div className="app-left">
                 <SearchNav query={query} onQueryChange={setQuery} />
                 <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
                 <SearchPanel query={query} onSelectLog={handleSelectSearchResult} />
+                <button onClick={checkReminders}>Test Notif</button>
             </div>
             <div className="app-right">
                 <LogCard

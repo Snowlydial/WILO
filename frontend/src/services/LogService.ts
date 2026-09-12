@@ -33,3 +33,8 @@ export async function deleteLog(id:number): Promise<LogResponse> {
     const res = await api.delete<LogResponse>(`/logs/${id}`);
     return res.data;
 }
+
+export async function getDueReminders(): Promise<LogResponse[]> {
+    const res = await api.get<LogResponse[]>('/logs/reminders/due');
+    return res.data;
+}
