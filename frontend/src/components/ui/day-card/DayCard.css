@@ -90,13 +90,13 @@
 }
 
 .day-card-status-done {
-    background: #219EBC;
+    background: #7EAD10;
     color: #011627;
 }
 
 .day-card-status-open {
     background: #FFB703;
-    color: #F0F1F2;
+    color: #011627;
 }
 
 .day-card-selected {
