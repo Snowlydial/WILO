@@ -34,6 +34,13 @@ public class LogService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No log found for date: " + date));
     }
 
+    public List<LogResponse> getDueReminders() {
+        LocalDate today = LocalDate.now();
+        return logRepository.findDueReminders(today).stream()
+            .map(LogResponse::from)
+            .toList();
+    }
+
     public List<LogResponse> search(String query) {
         return logRepository.searchByTitleOrContent(query).stream()
             .map(LogResponse::from)

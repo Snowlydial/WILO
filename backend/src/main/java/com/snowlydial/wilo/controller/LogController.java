@@ -59,4 +59,9 @@ public class LogController {
     public void destroy(@PathVariable Long id) {
         logService.delete(id);
     }
+
+    @GetMapping("/reminders/due")
+    public List<LogResponse> getDueReminders() {
+        return logService.getDueReminders();
+    }
 }
