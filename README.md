@@ -31,6 +31,10 @@ WILO/
 └── shell/ Go/Wails native desktop wrapper
 ```
 
+## Setup before building
+
+Add a motivation/reference image at `frontend/public/images/motivation.jpg` (roughly 1000x600 or similar ratio works well) - it displays in the search panel when idle. The app expects a file at this path; without it, that panel will just show an empty background.
+
 ## Building from source
 
 **Prerequisites:** Java 21+, Node.js, Go, [Wails CLI](https://wails.io/docs/gettingstarted/installation)
@@ -41,7 +45,7 @@ WILO/
 build.bat      # Windows
 ```
 
-This builds the frontend, bundles it into the Spring Boot jar, copies the jar next to the Wails shell, and produces a native executable in `shell/build/bin/`.
+This builds the frontend, bundles it into the Spring Boot jar, and produces a native executable with the jar alongside it in `shell/build/bin/` - the whole folder is self-contained and can be moved anywhere.
 
 **Running the backend alone (dev mode):**
 ```bash

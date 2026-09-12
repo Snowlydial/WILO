@@ -16,7 +16,7 @@ func resolveJarPath() string {
 		return ""
 	}
 	exeDir := filepath.Dir(exePath)
-	return filepath.Join(exeDir, "..", "..", "backend", "wilo-0.0.1.jar")
+	return filepath.Join(exeDir, "wilo-0.0.1.jar")
 }
 
 func startBackend() {
