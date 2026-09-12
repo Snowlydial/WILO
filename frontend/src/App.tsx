@@ -96,9 +96,9 @@ function App() {
                 (now.getHours() === notifyHour && now.getMinutes() >= notifyMinute);
 
             const due = await getDueReminders();
-            setDueReminders(due); // bell badge/dropdown stays live regardless of notify time
+            setDueReminders(due);
 
-            if (!isPastNotifyTime) return; // don't fire the OS notification yet
+            if (!isPastNotifyTime) return;
 
             const newlyDue = due.filter((log) => !notifiedReminderIds.has(log.id));
             if (newlyDue.length > 0 && Notification.permission === 'granted') {
