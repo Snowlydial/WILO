@@ -123,6 +123,11 @@
     color: #F0F1F2;
 }
 
+.done-btn-active {
+    background: #4a7a08;
+    opacity: 0.7;
+}
+
 .reminder-btn {
     display: flex;
     flex-direction: row;

@@ -38,11 +38,12 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
 
     function handleContentBlur() {
         setIsEditing(false);
+        const contentChanged = content !== log!.content;
         onUpdate(log!.id, {
             title,
             content,
             dateFor: log!.dateFor,
-            isDone: log!.isDone,
+            isDone: contentChanged ? false : log!.isDone,
             reminderFor: log!.reminderFor,
         });
     }
@@ -89,6 +90,17 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
             reminderFor: null,
         });
     }
+
+    function handleToggleDone() {
+        const newDoneState = !log!.isDone;
+        onUpdate(log!.id, {
+            title,
+            content,
+            dateFor: log!.dateFor,
+            isDone: newDoneState,
+            reminderFor: newDoneState ? null : log!.reminderFor,
+        });
+    }
     
     return (
         <>
@@ -103,9 +115,9 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
                         </button>
                     </div>
                     <div className="card-nav-right">
-                        <div className="done-btn-wrapper custom-btn">
-                            <button className="done-btn">
-                                <span>Mark as done </span>
+                        <div className={`done-btn-wrapper custom-btn ${log.isDone ? 'done-btn-active' : ''}`}>
+                            <button className="done-btn" onClick={handleToggleDone}>
+                                <span>{log.isDone ? 'Done' : 'Mark as done'} </span>
                                 <img src="/icons/check.svg" alt="check-icon" />
                             </button>
                         </div>
