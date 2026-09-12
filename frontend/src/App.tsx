@@ -56,10 +56,10 @@ function App() {
         };
     }
 
-    async function checkReminders() {
+    // Manual test button
+    async function handleTestNotifications() {
         const settings = await getSettings();
         if (!settings.reminderState) return;
-
         const due = await getDueReminders();
         due.forEach((log) => {
             if (Notification.permission === 'granted') {
@@ -72,6 +72,22 @@ function App() {
         if (Notification.permission === 'default') {
             Notification.requestPermission();
         }
+
+        const notifiedIds = new Set<number>();
+
+        async function checkReminders() {
+            const settings = await getSettings();
+            if (!settings.reminderState) return;
+
+            const due = await getDueReminders();
+            due.forEach((log) => {
+                if (!notifiedIds.has(log.id) && Notification.permission === 'granted') {
+                    fireReminderNotification(log);
+                    notifiedIds.add(log.id);
+                }
+            });
+        }
+
         checkReminders();
         const interval = setInterval(checkReminders, 60000);
         return () => clearInterval(interval);
@@ -83,7 +99,7 @@ function App() {
                 <SearchNav query={query} onQueryChange={setQuery} />
                 <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
                 <SearchPanel query={query} onSelectLog={handleSelectSearchResult} />
-                <button onClick={checkReminders}>Test Notif</button>
+                {/* <button onClick={handleTestNotifications}>Test Notif</button> */}
             </div>
             <div className="app-right">
                 <LogCard
