@@ -32,7 +32,9 @@ function App() {
         const weekDates = getWeekDates(forDate);
         const start = formatDateForApi(weekDates[0]);
         const end = formatDateForApi(weekDates[6]);
+        console.log('Refreshing statuses for range:', start, 'to', end);
         const results = await getStatusRange(start, end);
+        console.log('Got statuses:', results);
         setStatuses(new Map(results.map((s) => [s.dateFor, s])));
     }
 
@@ -49,6 +51,7 @@ function App() {
     async function handleUpdateLog(id: number, data: LogRequest) {
         const updated = await updateLog(id, data);
         setCurrentLog(updated);
+        await refreshStatuses(selectedDate);
     }
 
     async function handleDeleteLog(id: number) {
