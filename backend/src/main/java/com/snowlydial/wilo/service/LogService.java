@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.snowlydial.wilo.model.Log;
 import com.snowlydial.wilo.dto.LogRequest;
 import com.snowlydial.wilo.dto.LogResponse;
+import com.snowlydial.wilo.dto.LogStatusResponse;
 import com.snowlydial.wilo.repo.LogRepository;
 
 @Service
@@ -71,5 +72,11 @@ public class LogService {
         log.setDateFor(request.dateFor());
         log.setDone(request.isDone());
         log.setReminderFor(request.reminderFor());
+    }
+
+    public List<LogStatusResponse> getStatusRange(LocalDate start, LocalDate end) {
+        return logRepository.findByDateForBetween(start, end).stream()
+            .map(LogStatusResponse::from)
+            .toList();
     }
 }

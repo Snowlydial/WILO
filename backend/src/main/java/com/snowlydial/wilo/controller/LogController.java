@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.snowlydial.wilo.dto.LogRequest;
 import com.snowlydial.wilo.dto.LogResponse;
+import com.snowlydial.wilo.dto.LogStatusResponse;
 import com.snowlydial.wilo.service.LogService;
 
 import jakarta.validation.Valid;
@@ -63,5 +64,10 @@ public class LogController {
     @GetMapping("/reminders/due")
     public List<LogResponse> getDueReminders() {
         return logService.getDueReminders();
+    }
+
+    @GetMapping("/status")
+    public List<LogStatusResponse> getStatusRange(@RequestParam LocalDate start, @RequestParam LocalDate end) {
+        return logService.getStatusRange(start, end);
     }
 }

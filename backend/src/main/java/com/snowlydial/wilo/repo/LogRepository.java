@@ -21,4 +21,7 @@ public interface LogRepository extends JpaRepository<Log, Long>{
 
     @Query("SELECT l FROM Log l WHERE l.reminderFor <= :date AND l.isDone = false")
     List<Log> findDueReminders(@Param("date") LocalDate date);
+
+    @Query("SELECT l FROM Log l WHERE l.dateFor BETWEEN :start AND :end")
+    List<Log> findByDateForBetween(@Param("start") LocalDate start, @Param("end") LocalDate end);
 }
