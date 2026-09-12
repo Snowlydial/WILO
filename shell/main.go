@@ -30,7 +30,7 @@ func main() {
 		Width:     1280,
 		Height:    700,
 		MinWidth:  900,
-		MinHeight: 600,
+		MinHeight: 500,
 		OnStartup: app.startup,
 		OnShutdown: func(ctx context.Context) {
 			stopBackend()
