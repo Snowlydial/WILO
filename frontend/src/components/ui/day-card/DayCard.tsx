@@ -3,7 +3,7 @@ import './DayCard.css';
 interface DayCardProps {
     day: string
     dayTag: string
-    status: string
+    status: 'done' | 'open' | 'none'
     isSelected: boolean
     onDayChange: () => void
 }
@@ -15,7 +15,11 @@ export default function DayCard({day, dayTag, status, isSelected, onDayChange}:D
                 <span className='day-card-tag'>{dayTag}</span>
                 <span className='day-card-day'>{day}</span>
             </div>
-            <span className="day-card-status">{status}</span>
+            {status !== 'none' && (
+                <span className={`day-card-status day-card-status-${status}`}>
+                    {status === 'done' ? 'Done' : 'Open'}
+                </span>
+            )}
         </div>
     )
 }

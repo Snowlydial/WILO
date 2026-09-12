@@ -1,9 +1,15 @@
 import './DateSelector.css'
+
+import { useEffect } from 'react';
+
 import DayCard from "../day-card/DayCard"
 import MonthYearSelector from "../month-year-selector/MonthYearSelector"
 import { useState } from 'react';
 
 import { dayHeaders, getWeekDates } from '../../../utils/DateUtil';
+import type { LogStatus } from '../../../types/log/LogStatus';
+import { formatDateForApi } from '../../../utils/DateUtil';
+import { getStatusRange } from '../../../services/LogService';
 
 type DateSelectorProps = {
     selectedDate: Date;
@@ -12,6 +18,7 @@ type DateSelectorProps = {
 
 export default function DateSelector({ selectedDate, onDateChange }: DateSelectorProps) {
     const [viewDate, setViewDate] = useState(selectedDate);
+    const [statuses, setStatuses] = useState<Map<string, LogStatus>>(new Map());
 
     const selectedMonth = viewDate.getMonth();
     const selectedYear = viewDate.getFullYear();
@@ -46,6 +53,15 @@ export default function DateSelector({ selectedDate, onDateChange }: DateSelecto
         updated.setDate(viewDate.getDate() + 7);
         setViewDate(updated);
     }
+
+    useEffect(() => {
+        const start = formatDateForApi(weekDates[0]);
+        const end = formatDateForApi(weekDates[6]);
+        getStatusRange(start, end).then((results) => {
+            const map = new Map(results.map((s) => [s.dateFor, s]));
+            setStatuses(map);
+        });
+    }, [viewDate]);
     
     return (
         <div className="date-selector">
@@ -65,16 +81,20 @@ export default function DateSelector({ selectedDate, onDateChange }: DateSelecto
                 >
                     <img src="/icons/arrow-left.svg" alt="previous"/>
                 </button>
-                {weekDates.map((date, index) => (
-                    <DayCard
-                        key={date.toISOString()}
-                        day={String(date.getDate())}
-                        dayTag={dayHeaders[index]}
-                        status="status"
-                        isSelected={date.toDateString() === selectedDate.toDateString()}
-                        onDayChange={() => onDateChange(date)}
-                    />
-                ))}
+                {weekDates.map((date, index) => {
+                    const dateStr = formatDateForApi(date);
+                    const status = statuses.get(dateStr);
+                    return (
+                        <DayCard
+                            key={date.toISOString()}
+                            day={String(date.getDate())}
+                            dayTag={dayHeaders[index]}
+                            status={status ? (status.isDone ? 'done' : 'open') : 'none'}
+                            isSelected={date.toDateString() === selectedDate.toDateString()}
+                            onDayChange={() => onDateChange(date)}
+                        />
+                    );
+                })}
                 <button
                     className='selector-arrow'
                     onClick={handleNextWeek}
