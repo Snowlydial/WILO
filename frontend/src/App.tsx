@@ -87,10 +87,18 @@ function App() {
 
         async function checkReminders() {
             const settings = await getSettings();
-            const due = await getDueReminders();
-            setDueReminders(due);
-
             if (!settings.reminderState) return;
+
+            const now = new Date();
+            const [notifyHour, notifyMinute] = (settings.notifyTimeOfDay ?? '09:00:00').split(':').map(Number);
+            const isPastNotifyTime =
+                now.getHours() > notifyHour ||
+                (now.getHours() === notifyHour && now.getMinutes() >= notifyMinute);
+
+            const due = await getDueReminders();
+            setDueReminders(due); // bell badge/dropdown stays live regardless of notify time
+
+            if (!isPastNotifyTime) return; // don't fire the OS notification yet
 
             const newlyDue = due.filter((log) => !notifiedReminderIds.has(log.id));
             if (newlyDue.length > 0 && Notification.permission === 'granted') {
@@ -100,7 +108,7 @@ function App() {
         }
 
         checkReminders();
-        const interval = setInterval(checkReminders, 60000);
+        const interval = setInterval(checkReminders, 10000);
         return () => clearInterval(interval);
     }, []);
 
