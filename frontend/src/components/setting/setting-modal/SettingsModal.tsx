@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../ui/modal/Modal';
+import MonthlyRecap from '../monthly-recap/MonthlyRecap';
 import { getSettings, updateSettings } from '../../../services/SettingsService';
 import type { Settings } from '../../../types/Settings';
 import './SettingsModal.css';
 
 interface SettingsModalProps {
     onClose: () => void;
+    onSelectDay: (date: string) => void;
 }
 
 type Tab = 'settings' | 'recap';
 
-export default function SettingsModal({ onClose }: SettingsModalProps) {
+export default function SettingsModal({ onClose, onSelectDay }: SettingsModalProps) {
     const [activeTab, setActiveTab] = useState<Tab>('settings');
     const [settings, setSettings] = useState<Settings | null>(null);
 
@@ -23,6 +25,11 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
         const updated = { ...settings, [field]: value };
         setSettings(updated);
         updateSettings(updated);
+    }
+
+    function handleSelectDay(dateStr: string) {
+        onSelectDay(dateStr);
+        onClose();
     }
 
     return (
@@ -85,9 +92,7 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                     )}
 
                     {activeTab === 'recap' && (
-                        <div className="settings-recap-placeholder">
-                            Monthly recap coming next.
-                        </div>
+                        <MonthlyRecap onSelectDay={handleSelectDay} />
                     )}
                 </div>
             </div>

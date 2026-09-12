@@ -139,7 +139,10 @@ function App() {
                 />
             </div>
             {showSettings && (
-                <SettingsModal onClose={() => setShowSettings(false)} />
+                <SettingsModal
+                    onClose={() => setShowSettings(false)}
+                    onSelectDay={handleSelectSearchResult}
+                />
             )}
         </div>
     )
