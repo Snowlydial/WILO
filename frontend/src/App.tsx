@@ -8,6 +8,8 @@ import LogCard from "./components/log/LogCard";
 import DateSelector from "./components/ui/date-selector/DateSelector";
 import SearchNav from "./components/ui/search-nav/SearchNav";
 import SearchPanel from "./components/ui/search-panel/SearchPanel";
+import SettingsModal from "./components/setting/SettingsModal";
+
 import { formatDateForApi, getWeekDates } from './utils/DateUtil';
 import { getLogByDate, createLog, updateLog, deleteLog, getStatusRange, getDueReminders } from './services/LogService';
 import { getSettings } from './services/SettingsService';
@@ -22,6 +24,7 @@ function App() {
     const [query, setQuery] = useState('');
     const [statuses, setStatuses] = useState<Map<string, LogStatus>>(new Map());
     const [dueReminders, setDueReminders] = useState<LogResponse[]>([]);
+    const [showSettings, setShowSettings] = useState(false);
 
     useEffect(() => {
         const dateStr = formatDateForApi(selectedDate);
@@ -109,6 +112,7 @@ function App() {
                     onQueryChange={setQuery}
                     dueReminders={dueReminders}
                     onSelectReminder={handleSelectSearchResult}
+                    onLogoClick={() => setShowSettings(true)}
                 />
                 <DateSelector
                     selectedDate={selectedDate}
@@ -126,6 +130,9 @@ function App() {
                     onDelete={handleDeleteLog}
                 />
             </div>
+            {showSettings && (
+                <SettingsModal onClose={() => setShowSettings(false)} />
+            )}
         </div>
     )
 }

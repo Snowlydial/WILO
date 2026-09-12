@@ -8,9 +8,10 @@ interface SearchNavProps {
     onQueryChange: (value: string) => void;
     dueReminders: LogResponse[];
     onSelectReminder: (dateStr: string) => void;
+    onLogoClick: () => void;
 }
 
-export default function SearchNav({ query, onQueryChange, dueReminders, onSelectReminder }: SearchNavProps) {
+export default function SearchNav({ query, onQueryChange, dueReminders, onSelectReminder, onLogoClick }: SearchNavProps) {
     const [showDropdown, setShowDropdown] = useState(false);
 
     function handleSelect(dateStr: string) {
@@ -20,7 +21,7 @@ export default function SearchNav({ query, onQueryChange, dueReminders, onSelect
 
     return (
         <nav>
-            <span className="logo">Logo</span>
+            <button className="logo" onClick={onLogoClick}>Logo</button>
             <div className="nav-right">
                 <input
                     className="search-input"
