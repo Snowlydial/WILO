@@ -3,7 +3,7 @@ import Modal from '../../ui/modal/Modal';
 import MonthlyRecap from '../monthly-recap/MonthlyRecap';
 import { getSettings, updateSettings } from '../../../services/SettingsService';
 import type { Settings } from '../../../types/Settings';
-import { setAlwaysOnTop } from '../../../services/WailsBridge';
+import { setAlwaysOnTop, setAutostart } from '../../../services/WailsBridge';
 import './SettingsModal.css';
 
 interface SettingsModalProps {
@@ -29,6 +29,9 @@ export default function SettingsModal({ onClose, onSelectDay }: SettingsModalPro
 
         if (field === 'displayOver') {
             setAlwaysOnTop(value as boolean);
+        }
+        if (field === 'autostart') {
+            setAutostart(value as boolean);
         }
     }
 
