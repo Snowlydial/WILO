@@ -1,0 +1,94 @@
+.recap {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recap-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.recap-arrow {
+    background: none;
+    border: none;
+    color: #F0F1F2;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.recap-title {
+    font-size: 18px;
+    color: #F0F1F2;
+    min-width: 160px;
+    text-align: center;
+}
+
+.recap-stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.recap-stat-done {
+    color: #7EAD10;
+}
+
+.recap-stat-open {
+    color: #FFB703;
+}
+
+.recap-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.recap-day-header {
+    text-align: center;
+    font-size: 11px;
+    color: #F0F1F2;
+    opacity: 0.6;
+    padding-bottom: 5px;
+}
+
+.recap-cell {
+    box-sizing: border-box;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #023047;
+    border: 1px solid #F0F1F2;
+    border-radius: 8px;
+
+    font-size: 13px;
+    color: #F0F1F2;
+    cursor: pointer;
+}
+
+.recap-cell:hover {
+    border-color: #219EBC;
+}
+
+.recap-cell-done {
+    background: #7EAD10;
+    color: #011627;
+}
+
+.recap-cell-open {
+    background: #FFB703;
+    color: #F0F1F2;
+}
+
+.recap-cell-empty {
+    aspect-ratio: 1;
+}

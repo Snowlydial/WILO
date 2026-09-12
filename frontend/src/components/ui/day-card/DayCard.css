@@ -1,0 +1,115 @@
+.day-card {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    width: 67px;
+    height: 65px;
+
+    background: #011627;
+    border: 1px solid #F0F1F2;
+    border-radius: 10px;
+
+    cursor:pointer;
+}
+
+.day-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+
+    width: 45px;
+    height: 44px;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.day-info > .day-card-day {
+    height: 29px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 29px;
+    line-height: 32px;
+    text-align: center;
+    color: #F0F1F2;
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.day-info > .day-card-tag {
+    height: 12px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+    color: #F0F1F2;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+} 
+
+.day-card-status {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1px 7px;
+
+    background: #219EBC;
+    border-radius: 50px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+
+    color: #011627;
+}
+
+.day-card-status-done {
+    background: #7EAD10;
+    color: #011627;
+}
+
+.day-card-status-open {
+    background: #FFB703;
+    color: #011627;
+}
+
+.day-card-selected {
+    background: #219EBC;
+    border: 1px solid #F0F1F2;
+}
+
+.day-card-selected > .day-card-day,
+.day-card-selected > .day-card-tag {
+    color: #011627;
+}
+
+.day-card-selected > .day-card-status {
+    background: #011627;
+    color: #F0F1F2;
+}

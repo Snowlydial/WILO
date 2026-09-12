@@ -1,0 +1,105 @@
+.settings-modal {
+    width: 700px;
+    height: 450px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-modal-body {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex: 1;
+    min-height: 0;
+}
+
+.settings-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.settings-nav-item {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 15px;
+    text-align: left;
+
+    background: transparent;
+    border: 1px solid #F0F1F2;
+    border-radius: 8px;
+
+    font-size: 14px;
+    color: #F0F1F2;
+    cursor: pointer;
+}
+
+.settings-nav-item:hover {
+    border-color: #219EBC;
+}
+
+.settings-nav-active {
+    background: #219EBC;
+    color: #011627;
+}
+
+.settings-content {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+
+    background: #011627;
+    border: 1px solid #F0F1F2;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 15px;
+    color: #F0F1F2;
+    cursor: pointer;
+}
+
+.settings-row input[type="time"] {
+    box-sizing: border-box;
+    padding: 6px 10px;
+
+    background: #023047;
+    border: 1px solid #F0F1F2;
+    border-radius: 8px;
+
+    font-family: 'Ubuntu Mono', monospace;
+    color: #F0F1F2;
+}
+
+.settings-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.settings-recap-placeholder {
+    color: #F0F1F2;
+    opacity: 0.6;
+    text-align: center;
+    padding-top: 40px;
+}
+
+.settings-row input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
