@@ -56,18 +56,6 @@ function App() {
         };
     }
 
-    // Manual test button
-    async function handleTestNotifications() {
-        const settings = await getSettings();
-        if (!settings.reminderState) return;
-        const due = await getDueReminders();
-        due.forEach((log) => {
-            if (Notification.permission === 'granted') {
-                fireReminderNotification(log);
-            }
-        });
-    }
-
     useEffect(() => {
         if (Notification.permission === 'default') {
             Notification.requestPermission();
@@ -99,7 +87,6 @@ function App() {
                 <SearchNav query={query} onQueryChange={setQuery} />
                 <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
                 <SearchPanel query={query} onSelectLog={handleSelectSearchResult} />
-                {/* <button onClick={handleTestNotifications}>Test Notif</button> */}
             </div>
             <div className="app-right">
                 <LogCard
