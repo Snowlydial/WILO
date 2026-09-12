@@ -3,9 +3,11 @@ import "./LogCard.css";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
 import type { LogResponse } from "../../types/log/LogResponse";
 import type { LogRequest } from "../../types/log/LogRequest";
 import Modal from "../ui/modal/Modal";
+import ReminderModal from "../ui/reminder-modal/ReminderModal";
 
 interface LogCardProps {
     log: LogResponse | null;
@@ -19,6 +21,7 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
     const [title, setTitle] = useState('');
     const [isEditing, setIsEditing] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showReminderModal, setShowReminderModal] = useState(false);
 
     useEffect(() => {
         setContent(log?.content ?? '');
@@ -60,13 +63,44 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
         setShowDeleteModal(false);
         await onDelete(log!.id);
     }
+
+    function formatReminderLabel(reminderFor: string | null): string {
+        if (!reminderFor) return "Set Reminder";
+        const [year, month, day] = reminderFor.split('-');
+        return `Reminder at: ${day}/${month}/${year}`;
+    }
+
+    function handleSetReminder(date: string) {
+        onUpdate(log!.id, {
+            title,
+            content,
+            dateFor: log!.dateFor,
+            isDone: log!.isDone,
+            reminderFor: date,
+        });
+    }
+
+    function handleClearReminder() {
+        onUpdate(log!.id, {
+            title,
+            content,
+            dateFor: log!.dateFor,
+            isDone: log!.isDone,
+            reminderFor: null,
+        });
+    }
     
     return (
         <>
             <div className="log-card">
                 <div className="log-card-nav">
                     <div className="card-nav-left">
-                        <button className="reminder-btn custom-btn">Set Reminder</button>
+                        <button
+                            className="reminder-btn custom-btn"
+                            onClick={() => setShowReminderModal(true)}
+                        >
+                            {formatReminderLabel(log.reminderFor)}
+                        </button>
                     </div>
                     <div className="card-nav-right">
                         <div className="done-btn-wrapper custom-btn">
@@ -118,6 +152,15 @@ export default function LogCard({ log, onCreate, onUpdate, onDelete }: LogCardPr
                     </div>
                 </div>
             </div>
+
+            {showReminderModal && (
+                <ReminderModal
+                    currentReminder={log.reminderFor}
+                    onClose={() => setShowReminderModal(false)}
+                    onSetReminder={handleSetReminder}
+                    onClearReminder={handleClearReminder}
+                />
+            )}
 
             {showDeleteModal && (
                 <Modal

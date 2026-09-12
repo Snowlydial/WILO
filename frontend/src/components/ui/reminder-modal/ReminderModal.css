@@ -1,0 +1,70 @@
+.reminder-modal {
+    width: 350px;
+}
+
+.reminder-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reminder-label {
+    font-size: 14px;
+    color: #F0F1F2;
+    opacity: 0.8;
+}
+
+.reminder-date-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 15px;
+
+    background: #023047;
+    border: 1px solid #F0F1F2;
+    border-radius: 50px;
+
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 16px;
+    color: #F0F1F2;
+
+    outline: none;
+}
+
+.reminder-date-input:focus {
+    border-color: #219EBC;
+}
+
+.reminder-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.reminder-actions button {
+    box-sizing: border-box;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.reminder-clear-btn {
+    background: transparent;
+    border: 1px solid #F0F1F2;
+    color: #F0F1F2;
+}
+
+.reminder-clear-btn:hover {
+    background: rgba(240, 241, 242, 0.1);
+}
+
+.reminder-save-btn {
+    background: #219EBC;
+    border: 1px solid #F0F1F2;
+    color: #011627;
+}
+
+.reminder-save-btn:hover {
+    background: #1a7f9c;
+}
